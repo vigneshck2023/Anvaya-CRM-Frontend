@@ -7,7 +7,7 @@ const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-
+import "./styles.css";
 
 root.render(
   <BrowserRouter>
