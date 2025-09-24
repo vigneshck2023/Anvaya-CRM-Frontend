@@ -1,0 +1,333 @@
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+.app-container {
+  font-family: "Inter", sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Header */
+.navbar {
+  background-color: #223348 !important;
+}
+
+.navbar-brand {
+  color: aliceblue !important;
+  font-family: "Inter", sans-serif;
+  font-size: 32px !important;
+  text-shadow: 3px 3px 6px black;
+  font-weight: bold;
+}
+
+.navbar-toggler {
+  border-color: aliceblue !important;
+}
+
+.navbar-toggler-icon {
+  filter: invert(100%);
+}
+
+.navbar-nav .nav-link {
+  color: aliceblue !important;
+  font-weight: 500;
+  font-size: 20px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.nav-link {
+  font-weight: bold;
+  font-size: 20px;
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: lightgrey;
+  transition: width 300ms ease-in-out;
+}
+
+.nav-link:hover::after,
+.nav-link:focus::after {
+  width: 100%;
+}
+
+/* Layout */
+.main-layout {
+  padding: 20px;
+  min-height: calc(100vh - 76px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Lead Cards Row */
+.lead-cards-row {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 23px;
+  text-align: center;
+}
+
+.newLead,
+.contractedLead,
+.qualifiedLead {
+  width: 250px;
+  height: 150px;
+  border: 4px solid black;
+  border-radius: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  color: black;
+  font-weight: normal;
+  font-size: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.newLead:hover,
+.contractedLead:hover,
+.qualifiedLead:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Different box colors */
+.newLead {
+  background-color: #b2f2bb;
+}
+
+.contractedLead {
+  background-color: #ffc9c9;
+}
+
+.qualifiedLead {
+  background-color: #a5d8ff;
+}
+
+/* Filters Section */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.filter-dropdown {
+  padding: 8px 15px;
+  border: 2px solid #223348;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.btn-add {
+  padding: 8px 20px;
+  background-color: #223348;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add:hover {
+  background-color: #1a2838;
+}
+
+/* Leads List */
+.leads-list {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.lead-item {
+  padding: 15px 10px;
+  font-size: 18px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.lead-item:last-child {
+  border-bottom: none;
+}
+
+hr {
+  margin: 5px 0;
+  border-color: #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content {
+    gap: 20px;
+  }
+
+  .lead-cards-row {
+    gap: 15px;
+  }
+
+  .newLead,
+  .contractedLead,
+  .qualifiedLead {
+    width: 200px;
+    height: 130px;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-dropdown,
+  .btn-add {
+    width: 100%;
+  }
+
+  .navbar-brand {
+    font-size: 28px;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .newLead,
+  .contractedLead,
+  .qualifiedLead {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .label {
+    font-size: 20px;
+  }
+}
+
+/* Loading and Error States */
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+}
+
+.error-container {
+  gap: 20px;
+}
+
+/* Count Styling */
+.count {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Lead Items Styling */
+.lead-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.lead-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.lead-status {
+  color: #666;
+  font-style: italic;
+}
+
+.lead-email,
+.lead-phone,
+.lead-company {
+  color: #555;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.lead-email::before {
+  content: "📧 ";
+}
+
+.lead-phone::before {
+  content: "📞 ";
+}
+
+.lead-company::before {
+  content: "🏢 ";
+}
+
+.no-leads {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .lead-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .count {
+    font-size: 36px;
+  }
+
+  .label {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .count {
+    font-size: 32px;
+  }
+
+  .label {
+    font-size: 16px;
+  }
+
+  .lead-name {
+    font-size: 16px;
+  }
+}
