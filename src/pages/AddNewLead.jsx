@@ -107,7 +107,7 @@ export default function AddNewLead({ onLeadAdded }) {
                 <option value="">Select</option>
                 <option value="Referral">Referral</option>
                 <option value="Website">Website</option>
-                <option value="Advertisement">Advertisement</option>
+                <option value="Cold Call">Cold Call</option>
               </select>
             </div>
 
