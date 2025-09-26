@@ -27,7 +27,7 @@ export default function Header() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <NavLink className="nav-link">
+                <NavLink className="nav-link" to={"/leads"}>
                   Lead
                 </NavLink>
               </li>

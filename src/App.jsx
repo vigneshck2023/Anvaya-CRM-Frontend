@@ -39,7 +39,7 @@ export default function App() {
       }
 
       setError(null);
-    } catch (err) {Q
+    } catch (err) {
       console.error("Error fetching leads:", err);
       setError("Failed to load leads. Please try again later.");
     } finally {

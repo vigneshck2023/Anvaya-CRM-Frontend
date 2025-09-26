@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import AddNewLead from "./pages/AddNewLead";
+import Lead from "./pages/Lead";
+import LeadDetails from "./pages/LeadDetails";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +16,8 @@ root.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/addNewLead" element={<AddNewLead />} />
+      <Route path="/leads" element={<Lead/>} />
+     <Route path="/leads/:id" element={<LeadDetails />} />
     </Routes>
   </BrowserRouter>
 );
