@@ -37,7 +37,7 @@ export default function Header() {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link">
+                <NavLink className="nav-link" to={"/addAgents"}>
                   Agent
                 </NavLink>
               </li>

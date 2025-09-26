@@ -5,6 +5,7 @@ import App from "./App";
 import AddNewLead from "./pages/AddNewLead";
 import Lead from "./pages/Lead";
 import LeadDetails from "./pages/LeadDetails";
+import Agent from "./pages/Agent";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,6 +19,7 @@ root.render(
       <Route path="/addNewLead" element={<AddNewLead />} />
       <Route path="/leads" element={<Lead/>} />
      <Route path="/leads/:id" element={<LeadDetails />} />
+     <Route path="/addAgents" element={<Agent />} />
     </Routes>
   </BrowserRouter>
 );
