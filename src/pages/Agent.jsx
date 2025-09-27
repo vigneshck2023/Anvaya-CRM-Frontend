@@ -37,7 +37,7 @@ const handleChange = (e) => {
       }
 
       if (addAgent) addAgent();
-      navigate("/");
+      navigate("/salesAgent");
     } catch (error) {
       console.error("Error adding lead:", error);
       alert("Error adding lead (network issue)");
