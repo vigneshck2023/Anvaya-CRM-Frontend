@@ -1,21 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 
 export default function AddNewLead({ onLeadAdded }) {
   const navigate = useNavigate();
   const [agents, setAgents] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef();
 
   const [formData, setFormData] = useState({
     name: "",
     source: "",
-    salesAgent: "",
+    salesAgent: [],
     status: "New",
     timeToClose: 0,
     priority: "",
   });
 
-  // fetch agents from backend
+  // Fetch agents from backend
   useEffect(() => {
     const fetchAgents = async () => {
       try {
@@ -31,9 +33,33 @@ export default function AddNewLead({ onLeadAdded }) {
     fetchAgents();
   }, []);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleCheckboxChange = (agentId) => {
+    setFormData((prev) => {
+      const isSelected = prev.salesAgent.includes(agentId);
+      if (isSelected) {
+        return {
+          ...prev,
+          salesAgent: prev.salesAgent.filter((id) => id !== agentId),
+        };
+      } else {
+        return { ...prev, salesAgent: [...prev.salesAgent, agentId] };
+      }
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData({
       ...formData,
       [name]: name === "timeToClose" ? parseInt(value, 10) : value,
@@ -68,15 +94,9 @@ export default function AddNewLead({ onLeadAdded }) {
   return (
     <div className="app-container">
       <Header />
-
-      {/* Form section only */}
       <div className="d-flex justify-content-center mt-5">
-        <div
-          className="card shadow p-4"
-          style={{ maxWidth: "600px", width: "100%" }}
-        >
+        <div className="card shadow p-4" style={{ maxWidth: "600px", width: "100%" }}>
           <h2 className="mb-4 text-center" style={{ color: "#223348" }}>
-            {" "}
             Add New Lead
           </h2>
 
@@ -111,23 +131,39 @@ export default function AddNewLead({ onLeadAdded }) {
               </select>
             </div>
 
-            {/* Sales Agent */}
-            <div className="mb-3">
-              <label className="form-label">Sales Agent</label>
-              <select
-                className="form-select"
-                name="salesAgent"
-                value={formData.salesAgent}
-                onChange={handleChange}
-                required
+            {/* Sales Agent - Multi Select Checkbox Dropdown */}
+            <div className="mb-3" ref={dropdownRef}>
+              <label className="form-label">Sales Agent(s)</label>
+              <div
+                className="form-control"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{ cursor: "pointer", userSelect: "none" }}
               >
-                <option value="">Select Agent</option>
-                {agents.map((agent) => (
-                  <option key={agent._id} value={agent._id}>
-                    {agent.name}
-                  </option>
-                ))}
-              </select>
+                {formData.salesAgent.length > 0
+                  ? `${formData.salesAgent.length} selected`
+                  : "Select Agent(s)"}
+              </div>
+              {dropdownOpen && (
+                <div
+                  className="border p-2 position-absolute bg-white shadow"
+                  style={{ maxHeight: "150px", overflowY: "auto", zIndex: 1000 }}
+                >
+                  {agents.map((agent) => (
+                    <div key={agent._id} className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={agent._id}
+                        checked={formData.salesAgent.includes(agent._id)}
+                        onChange={() => handleCheckboxChange(agent._id)}
+                      />
+                      <label className="form-check-label" htmlFor={agent._id}>
+                        {agent.name}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Lead Status */}

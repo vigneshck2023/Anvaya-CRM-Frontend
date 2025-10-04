@@ -116,10 +116,6 @@ export default function SalesAgentDetails() {
                       <p className="mb-1"><strong>Status:</strong> {lead.status}</p>
                       <p className="mb-1"><strong>Priority:</strong> {lead.priority}</p>
                       <p className="mb-0"><strong>Time to Close:</strong> {lead.timeToClose} days</p>
-                      <button className="btn btn-sm btn-outline-primary mt-2"
-                        onClick={() => navigate(`/leads/${lead._id}`)}>
-                        View Lead
-                      </button>
                     </div>
                   ))
                 )}

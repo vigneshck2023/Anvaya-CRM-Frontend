@@ -10,7 +10,6 @@ export default function LeadDetails() {
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
@@ -60,64 +59,73 @@ export default function LeadDetails() {
 
   return (
     <>
-    <Header />
-    <div className="container my-4">
-      <h2 className="mb-4 text-primary">Lead Management: {lead.name}</h2>
+      <Header />
+      <div className="container my-4">
+        <h2 className="mb-4 text-primary">Lead Management: {lead.name}</h2>
 
-      <div className="row g-4">
-        {/* Lead Details */}
-        <div className="col-md-6">
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title mb-3">Lead Details</h5>
-              <p><strong>Lead Name:</strong> {lead.name}</p>
-              <p><strong>Sales Agent:</strong> {lead.salesAgent?.name}</p>
-              <p><strong>Source:</strong> {lead.source}</p>
-              <p><strong>Status:</strong> {lead.status}</p>
-              <p><strong>Priority:</strong> {lead.priority}</p>
-              <p><strong>Time to Close:</strong> {lead.timeToClose} days</p>
-              <button className="btn btn-secondary mt-2" onClick={() => navigate("/leads")}>
-                Back to Leads
-              </button>
+        <div className="row g-4">
+          {/* Lead Details */}
+          <div className="col-md-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title mb-3">Lead Details</h5>
+                <p><strong>Lead Name:</strong> {lead.name}</p>
+                <p>
+                  <strong>Sales Agents:</strong>{" "}
+                  {lead.salesAgent && lead.salesAgent.length > 0
+                    ? lead.salesAgent.map((agent, idx) => (
+                        <span key={agent._id}>
+                          {agent.name}{idx < lead.salesAgent.length - 1 ? ", " : ""}
+                        </span>
+                      ))
+                    : "No agents assigned"}
+                </p>
+                <p><strong>Source:</strong> {lead.source}</p>
+                <p><strong>Status:</strong> {lead.status}</p>
+                <p><strong>Priority:</strong> {lead.priority}</p>
+                <p><strong>Time to Close:</strong> {lead.timeToClose} days</p>
+                <button className="btn btn-secondary mt-2" onClick={() => navigate("/leads")}>
+                  Back to Leads
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Comments Section */}
-        <div className="col-md-6">
-          <div className="card shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title mb-3">Comments</h5>
+          {/* Comments Section */}
+          <div className="col-md-6">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h5 className="card-title mb-3">Comments</h5>
 
-              {(!lead.comments || lead.comments.length === 0) && (
-                <p className="text-muted">No comments yet.</p>
-              )}
+                {(!lead.comments || lead.comments.length === 0) && (
+                  <p className="text-muted">No comments yet.</p>
+                )}
 
-              {lead.comments?.map((c, idx) => (
-                <div key={idx} className="mb-3 p-3 bg-light rounded">
-                  <p className="mb-1"><strong>{c.author}</strong> - {new Date(c.date).toLocaleString()}</p>
-                  <p className="mb-0">{c.text}</p>
+                {lead.comments?.map((c, idx) => (
+                  <div key={idx} className="mb-3 p-3 bg-light rounded">
+                    <p className="mb-1"><strong>{c.author}</strong> - {new Date(c.date).toLocaleString()}</p>
+                    <p className="mb-0">{c.text}</p>
+                  </div>
+                ))}
+
+                {/* Add New Comment */}
+                <div className="mt-3">
+                  <textarea
+                    className="form-control mb-2"
+                    placeholder="Add a new comment..."
+                    rows="3"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                  ></textarea>
+                  <button className="btn btn-primary" onClick={handleCommentSubmit}>
+                    Submit Comment
+                  </button>
                 </div>
-              ))}
-
-              {/* Add New Comment */}
-              <div className="mt-3">
-                <textarea
-                  className="form-control mb-2"
-                  placeholder="Add a new comment..."
-                  rows="3"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                ></textarea>
-                <button className="btn btn-primary" onClick={handleCommentSubmit}>
-                  Submit Comment
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 }
