@@ -5,6 +5,7 @@ import App from "./App";
 import AddNewLead from "./pages/AddNewLead";
 import Lead from "./pages/Lead";
 import LeadDetails from "./pages/LeadDetails";
+import SalesAgentDetails from "./pages/SalesAgentDetails";
 import Agent from "./pages/Agent";
 import Sales from "./pages/Sales";
 import Report from "./pages/Report";
@@ -24,6 +25,7 @@ root.render(
      <Route path="/addAgents" element={<Agent />} />
      <Route path="/salesAgent" element={<Sales/>} />
      <Route path="/reports" element={<Report/>} />
+     <Route path="/agents/:id" element={<SalesAgentDetails />} />
     </Routes>
   </BrowserRouter>
 );

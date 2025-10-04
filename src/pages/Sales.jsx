@@ -1,7 +1,7 @@
 import Header from "../components/Header";
+import "../styles.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Sales() {
@@ -18,7 +18,9 @@ export default function Sales() {
   const fetchAgents = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://anvaya-crm-ebon.vercel.app/api/agent");
+      const response = await fetch(
+        "https://anvaya-crm-ebon.vercel.app/api/agent"
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -46,6 +48,7 @@ export default function Sales() {
     }
   };
 
+  // --- Loading State ---
   if (loading) {
     return (
       <div className="app-container">
@@ -60,6 +63,7 @@ export default function Sales() {
     );
   }
 
+  // --- Error State ---
   if (error) {
     return (
       <div className="app-container">
@@ -76,22 +80,20 @@ export default function Sales() {
     );
   }
 
+  // --- Success State ---
   return (
     <div className="app-container">
       <Header />
       <div className="main-layout">
-        <div className="content">
-          {/* Top bar: Button only (no filter for agents) */}
-          <div className="filters">
-            <button
-              className="btn-add"
-              onClick={() => navigate("/addAgents")}
-            >
-              Add New Agent
-            </button>
-          </div>
+        {/* Top bar: Add Agent button */}
+        <div className="filters">
+          <button className="btn-add" onClick={() => navigate("/addAgents")}>
+            Add New Agent
+          </button>
+        </div>
 
-          {/* Agents List */}
+        {/* Agents List */}
+        <div className="py-4">
           <div className="leads-list">
             {!Array.isArray(agents) || agents.length === 0 ? (
               <div className="no-leads">
@@ -101,23 +103,24 @@ export default function Sales() {
               </div>
             ) : (
               agents.map((agent, index) => (
-                <div key={agent.id || agent._id || index}>
-                  <div className="lead-item">
-                    <div className="lead-info">
-                      <div className="lead-name">
-                        {agent.name || `Agent ${index + 1}`}
-                      </div>
-                      <div className="lead-status">
-                        ({agent.role || "No Role"})
-                      </div>
+                <div
+                  key={agent.id || agent._id || index}
+                  className="lead-item"
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    navigate(`/agents/${agent._id || agent.id}`)
+                  }
+                >
+                  <div className="lead-info">
+                    <div className="lead-name">
+                      {agent.name || `Agent ${index + 1}`}
                     </div>
-                    {agent.email && (
-                      <div className="lead-email">{agent.email}</div>
-                    )}
-                    {agent.phone && (
-                      <div className="lead-phone">{agent.phone}</div>
-                    )}
+                    <div className="lead-status">
+                      ({agent.role || "No Role"})
+                    </div>
                   </div>
+                  {agent.email && <div className="lead-email">{agent.email}</div>}
+                  {agent.phone && <div className="lead-phone">{agent.phone}</div>}
                   {index < agents.length - 1 && <hr />}
                 </div>
               ))
