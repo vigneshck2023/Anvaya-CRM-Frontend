@@ -32,7 +32,7 @@ export default function Report() {
       .catch((err) => console.error("API Error:", err));
   }, []);
 
-  // 1️⃣ Total Closed vs Pipeline
+  // Total Closed vs Pipeline
   const closedCount = leadData.filter((l) => l.status === "Closed").length;
   const pipelineCount = leadData.length - closedCount;
 
@@ -48,7 +48,7 @@ export default function Report() {
     ],
   };
 
-  // 2️⃣ Leads Closed by Sales Agent
+  // Leads Closed by Sales Agent
   const agentCounts = {};
   leadData.forEach((lead) => {
     if (lead.status === "Closed") {
@@ -124,7 +124,7 @@ export default function Report() {
               <h5 className="text-center mb-3 text-success">
                 Leads Closed by Sales Agent
               </h5>
-              <div style={{ height: "300px" }}> {/* 👈 fixed height */}
+              <div style={{ height: "300px" }}>
                 <Bar data={leadsByAgentChart} options={options} />
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function Report() {
               <h5 className="text-center mb-3 text-danger">
                 Lead Status Distribution
               </h5>
-              <div style={{ height: "350px" }}> {/* 👈 slightly taller */}
+              <div style={{ height: "350px" }}>
                 <Pie data={statusChart} options={options} />
               </div>
             </div>
