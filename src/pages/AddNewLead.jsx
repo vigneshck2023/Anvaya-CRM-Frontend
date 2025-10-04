@@ -132,39 +132,50 @@ export default function AddNewLead({ onLeadAdded }) {
             </div>
 
             {/* Sales Agent - Multi Select Checkbox Dropdown */}
-            <div className="mb-3" ref={dropdownRef}>
-              <label className="form-label">Sales Agent(s)</label>
-              <div
-                className="form-control"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                style={{ cursor: "pointer", userSelect: "none" }}
-              >
-                {formData.salesAgent.length > 0
-                  ? `${formData.salesAgent.length} selected`
-                  : "Select Agent(s)"}
-              </div>
-              {dropdownOpen && (
-                <div
-                  className="border p-2 position-absolute bg-white shadow"
-                  style={{ maxHeight: "150px", overflowY: "auto", zIndex: 1000 }}
-                >
-                  {agents.map((agent) => (
-                    <div key={agent._id} className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id={agent._id}
-                        checked={formData.salesAgent.includes(agent._id)}
-                        onChange={() => handleCheckboxChange(agent._id)}
-                      />
-                      <label className="form-check-label" htmlFor={agent._id}>
-                        {agent.name}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* Sales Agent - Multi Select Checkbox Dropdown */}
+<div className="mb-3" ref={dropdownRef} style={{ position: "relative" }}>
+  <label className="form-label">Sales Agents</label>
+  <div
+    className="form-select d-flex align-items-center justify-content-between"
+    onClick={() => setDropdownOpen(!dropdownOpen)}
+    style={{ cursor: "pointer", minHeight: "38px" }}
+  >
+      {formData.salesAgent.length > 0
+        ? agents
+            .filter((a) => formData.salesAgent.includes(a._id))
+            .map((a) => a.name)
+            .join(", ")
+        : "Select Agents"}
+  </div>
+
+  {dropdownOpen && (
+    <div
+      className="border rounded p-2 position-absolute bg-white shadow"
+      style={{
+        maxHeight: "150px",
+        overflowY: "auto",
+        zIndex: 1000,
+        width: "100%",
+      }}
+    >
+      {agents.map((agent) => (
+        <div key={agent._id} className="form-check">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id={agent._id}
+            checked={formData.salesAgent.includes(agent._id)}
+            onChange={() => handleCheckboxChange(agent._id)}
+          />
+          <label className="form-check-label" htmlFor={agent._id}>
+            {agent.name}
+          </label>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
 
             {/* Lead Status */}
             <div className="mb-3">
