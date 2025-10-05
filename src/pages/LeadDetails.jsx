@@ -71,7 +71,7 @@ export default function LeadDetails() {
                 <h5 className="card-title mb-3">Lead Details</h5>
                 <p><strong>Lead Name:</strong> {lead.name}</p>
                 <p>
-                  <strong>Sales Agents:</strong>{" "}
+                  <strong>{lead.salesAgent.length === 1 ? "Sales Agent: " : "Sales Agents: "}</strong>{" "}
                   {lead.salesAgent && lead.salesAgent.length > 0
                     ? lead.salesAgent.map((agent, idx) => (
                         <span key={agent._id}>
