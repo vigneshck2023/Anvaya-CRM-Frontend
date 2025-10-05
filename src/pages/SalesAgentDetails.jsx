@@ -23,7 +23,9 @@ export default function SalesAgentDetails() {
   const fetchAgentDetails = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`https://anvaya-crm-ebon.vercel.app/api/agents/${id}`);
+      const res = await fetch(
+        `https://anvaya-crm-ebon.vercel.app/api/agents/${id}`,
+      );
       if (!res.ok) throw new Error("Failed to fetch agent");
       const data = await res.json();
 
@@ -41,8 +43,12 @@ export default function SalesAgentDetails() {
   // Filtering + sorting
   const filteredLeads = leads
     .filter((lead) => (statusFilter ? lead.status === statusFilter : true))
-    .filter((lead) => (priorityFilter ? lead.priority.includes(priorityFilter) : true))
-    .sort((a, b) => (sortBy === "timeToClose" ? a.timeToClose - b.timeToClose : 0));
+    .filter((lead) =>
+      priorityFilter ? lead.priority.includes(priorityFilter) : true,
+    )
+    .sort((a, b) =>
+      sortBy === "timeToClose" ? a.timeToClose - b.timeToClose : 0,
+    );
 
   if (loading) return <p className="text-center mt-4">Loading...</p>;
   if (error) return <p className="text-center mt-4 text-danger">{error}</p>;
@@ -60,10 +66,19 @@ export default function SalesAgentDetails() {
             <div className="card shadow-sm">
               <div className="card-body">
                 <h5 className="card-title mb-3">Agent Info</h5>
-                <p><strong>Name:</strong> {agent.name}</p>
-                <p><strong>Email:</strong> {agent.email}</p>
-                <p><strong>Total Leads:</strong> {leads.length}</p>
-                <button className="btn btn-secondary mt-2" onClick={() => navigate("/salesAgent")}>
+                <p>
+                  <strong>Name:</strong> {agent.name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {agent.email}
+                </p>
+                <p>
+                  <strong>Total Leads:</strong> {leads.length}
+                </p>
+                <button
+                  className="btn btn-secondary mt-2"
+                  onClick={() => navigate("/salesAgent")}
+                >
                   Back to Agents
                 </button>
               </div>
@@ -76,44 +91,39 @@ export default function SalesAgentDetails() {
               <div className="card-body">
                 <h5 className="card-title mb-3">Leads by {agent.name}</h5>
 
-                {/* Filters */}
+               {/* Filters */}
+                <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
+                  <select
+                    className="form-select flex-grow-1"
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                  >
+                    <option value="">Filter by Status</option>
+                    <option value="New">New</option>
+                    <option value="Qualified">Qualified</option>
+                    <option value="Contracted">Contracted</option>
+                  </select>
 
-                {/* Filters */}
+                  <select
+                    className="form-select flex-grow-1"
+                    value={priorityFilter}
+                    onChange={(e) => setPriorityFilter(e.target.value)}
+                  >
+                    <option value="">Filter by Priority</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
 
-                {/* Filters */}
-<div className="d-flex justify-content-center align-items-center gap-3 mb-3">
-  <select
-    className="form-select flex-grow-1"
-    value={statusFilter}
-    onChange={(e) => setStatusFilter(e.target.value)}
-  >
-    <option value="">Filter by Status</option>
-    <option value="New">New</option>
-    <option value="Qualified">Qualified</option>
-    <option value="Contracted">Contracted</option>
-  </select>
-
-  <select
-    className="form-select flex-grow-1"
-    value={priorityFilter}
-    onChange={(e) => setPriorityFilter(e.target.value)}
-  >
-    <option value="">Filter by Priority</option>
-    <option value="High">High</option>
-    <option value="Medium">Medium</option>
-    <option value="Low">Low</option>
-  </select>
-
-  <select
-    className="form-select flex-grow-1"
-    value={sortBy}
-    onChange={(e) => setSortBy(e.target.value)}
-  >
-    <option value="">Sort by</option>
-    <option value="timeToClose">Time to Close</option>
-  </select>
-</div>
-
+                  <select
+                    className="form-select flex-grow-1"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    <option value="">Sort by</option>
+                    <option value="timeToClose">Time to Close</option>
+                  </select>
+                </div>
 
                 {/* Leads List */}
                 {filteredLeads.length === 0 ? (
@@ -122,9 +132,15 @@ export default function SalesAgentDetails() {
                   filteredLeads.map((lead) => (
                     <div key={lead._id} className="mb-3 p-3 bg-light rounded">
                       <h6>{lead.name}</h6>
-                      <p className="mb-1"><strong>Status:</strong> {lead.status}</p>
-                      <p className="mb-1"><strong>Priority:</strong> {lead.priority.join(", ")}</p>
-                      <p className="mb-0"><strong>Time to Close:</strong> {lead.timeToClose} days</p>
+                      <p className="mb-1">
+                        <strong>Status:</strong> {lead.status}
+                      </p>
+                      <p className="mb-1">
+                        <strong>Priority:</strong> {lead.priority.join(", ")}
+                      </p>
+                      <p className="mb-0">
+                        <strong>Time to Close:</strong> {lead.timeToClose} days
+                      </p>
                     </div>
                   ))
                 )}
