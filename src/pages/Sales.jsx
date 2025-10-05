@@ -110,11 +110,6 @@ export default function Sales() {
                       {agent.role || "No Role"} | Active
                     </small>
                   </div>
-                  <div>
-                    <span className="badge btn-add text-white fw-bolder">
-                      {agent.source || "Internal"}
-                    </span>
-                  </div>
                 </div>
 
                 {agent.email && <p className="mb-0 mt-2">{agent.email}</p>}
