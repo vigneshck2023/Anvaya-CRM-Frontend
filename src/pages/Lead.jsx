@@ -18,7 +18,7 @@ export default function Lead() {
     fetchLeads();
   }, []);
 
-  // ✅ Fetch Leads from API
+  // Fetch Leads from API
   const fetchLeads = async () => {
     try {
       setLoading(true);
@@ -51,7 +51,7 @@ export default function Lead() {
     }
   };
 
-  // ✅ Unified Filter + Sort Logic
+  // Unified Filter + Sort Logic
   const getFilteredLeads = () => {
     if (!Array.isArray(leads)) return [];
 
@@ -74,7 +74,7 @@ export default function Lead() {
 
   const filteredLeads = getFilteredLeads();
 
-  // ✅ Loading State
+  // Loading State
   if (loading) {
     return (
       <div className="app-container">
@@ -87,7 +87,7 @@ export default function Lead() {
     );
   }
 
-  // ✅ Error State
+  // Error State
   if (error) {
     return (
       <div className="app-container">
@@ -96,7 +96,7 @@ export default function Lead() {
           <div className="alert alert-danger mb-3" role="alert">
             {error}
           </div>
-          <button className="btn btn-primary" onClick={fetchLeads}>
+          <button className="btn-add" onClick={fetchLeads}>
             Retry
           </button>
         </div>
@@ -104,7 +104,6 @@ export default function Lead() {
     );
   }
 
-  // ✅ Main Render
   return (
     <div className="app-container">
       <Header />
@@ -147,8 +146,8 @@ export default function Lead() {
           </select>
 
           {/* Add Lead Button */}
-          <button className="btn btn-primary" onClick={() => navigate("/addNewLead")}>
-            + Add New Lead
+          <button className="btn-add" onClick={() => navigate("/addNewLead")}>
+            Add New Lead
           </button>
         </div>
 
@@ -175,7 +174,7 @@ export default function Lead() {
                     </small>
                   </div>
                   <div>
-                    <span className="badge bg-info text-dark">
+                    <span className="badge btn-add text-white fw-bolder">
                       {lead.source || "Unknown Source"}
                     </span>
                   </div>

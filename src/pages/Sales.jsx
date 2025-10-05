@@ -8,6 +8,8 @@ export default function Sales() {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("");
 
   const navigate = useNavigate();
 
@@ -15,12 +17,11 @@ export default function Sales() {
     fetchAgents();
   }, []);
 
+  // Fetch agents from API
   const fetchAgents = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        "https://anvaya-crm-ebon.vercel.app/api/agent"
-      );
+      const response = await fetch("https://anvaya-crm-ebon.vercel.app/api/agent");
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -31,12 +32,12 @@ export default function Sales() {
 
       if (Array.isArray(data)) {
         setAgents(data);
-      } else if (data && Array.isArray(data.agents)) {
+      } else if (Array.isArray(data.agents)) {
         setAgents(data.agents);
-      } else if (data && data.data && Array.isArray(data.data)) {
+      } else if (data.data && Array.isArray(data.data)) {
         setAgents(data.data);
       } else {
-        setAgents([data]);
+        setAgents([]);
       }
 
       setError(null);
@@ -48,31 +49,52 @@ export default function Sales() {
     }
   };
 
-  // --- Loading State ---
+  // Filter + Sort Logic
+  const getFilteredAgents = () => {
+    let filtered = agents;
+
+    if (roleFilter !== "all") {
+      filtered = filtered.filter(
+        (agent) => agent.role && agent.role === roleFilter
+      );
+    }
+
+    if (sortBy === "name") {
+      filtered = filtered.sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      );
+    } else if (sortBy === "leadsCount") {
+      filtered = filtered.sort((a, b) => (b.leadsCount || 0) - (a.leadsCount || 0));
+    }
+
+    return filtered;
+  };
+
+  const filteredAgents = getFilteredAgents();
+
+  // Loading State
   if (loading) {
     return (
       <div className="app-container">
         <Header />
-        <div className="loading-container">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
+        <div className="loading-container text-center my-5">
+          <div className="spinner-border text-primary mb-3" role="status" />
           <p>Loading Sales Agents...</p>
         </div>
       </div>
     );
   }
 
-  // --- Error State ---
+  // Error State
   if (error) {
     return (
       <div className="app-container">
         <Header />
-        <div className="error-container">
-          <div className="alert alert-danger" role="alert">
+        <div className="error-container text-center my-5">
+          <div className="alert alert-danger mb-3" role="alert">
             {error}
           </div>
-          <button className="btn btn-primary" onClick={fetchAgents}>
+          <button className="btn-add" onClick={fetchAgents}>
             Retry
           </button>
         </div>
@@ -80,52 +102,59 @@ export default function Sales() {
     );
   }
 
-  // --- Success State ---
+  // Success State
   return (
     <div className="app-container">
       <Header />
-      <div className="main-layout">
-        {/* Top bar: Add Agent button */}
-        <div className="filters">
+      <div className="main-layout container py-4">
+        {/* Filters */}
+        <div className="d-flex flex-wrap gap-3 align-items-center mb-4">
+
+          {/* Add Agent Button */}
           <button className="btn-add" onClick={() => navigate("/addAgents")}>
             Add New Agent
           </button>
         </div>
 
-        {/* Agents List */}
-        <div className="py-4">
-          <div className="leads-list">
-            {!Array.isArray(agents) || agents.length === 0 ? (
-              <div className="no-leads">
-                {!Array.isArray(agents)
-                  ? "Invalid data format received"
-                  : "No agents found"}
-              </div>
-            ) : (
-              agents.map((agent, index) => (
-                <div
-                  key={agent.id || agent._id || index}
-                  className="lead-item"
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    navigate(`/agents/${agent._id || agent.id}`)
-                  }
-                >
-                  <div className="lead-info">
-                    <div className="lead-name">
-                      {agent.name || `Agent ${index + 1}`}
-                    </div>
-                    <div className="lead-status">
-                      ({agent.role || "No Role"})
-                    </div>
+        {/* Agent List */}
+        <div className="leads-list">
+          {!filteredAgents.length ? (
+            <div className="text-center text-muted py-5">
+              <p>No agents found.</p>
+            </div>
+          ) : (
+            filteredAgents.map((agent, index) => (
+              <div
+                key={agent._id || index}
+                className="lead-item border rounded p-3 mb-3 shadow-sm"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/agents/${agent._id || agent.id}`)}
+              >
+                <div className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h5 className="mb-1">{agent.name || `Agent ${index + 1}`}</h5>
+                    <small className="text-muted">
+                      {agent.role || "No Role"} |{" "}
+                      {agent.status || "Active"}
+                    </small>
                   </div>
-                  {agent.email && <div className="lead-email">{agent.email}</div>}
-                  {agent.phone && <div className="lead-phone">{agent.phone}</div>}
-                  {index < agents.length - 1 && <hr />}
+                  <div>
+                    <span className="badge btn-add text-white fw-bolder">
+                      {agent.source || "Internal"}
+                    </span>
+                  </div>
                 </div>
-              ))
-            )}
-          </div>
+
+                {agent.email && <p className="mb-0 mt-2">{agent.email}</p>}
+                {agent.phone && <p className="mb-0">{agent.phone}</p>}
+                {agent.leadsCount !== undefined && (
+                  <p className="mb-0 text-secondary">
+                    Leads Assigned: {agent.leadsCount}
+                  </p>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
