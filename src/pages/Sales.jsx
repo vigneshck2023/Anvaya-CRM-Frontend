@@ -1,8 +1,8 @@
-import Header from "../components/Header";
-import "../styles.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles.css";
 
 export default function Sales() {
   const [agents, setAgents] = useState([]);
@@ -10,11 +10,11 @@ export default function Sales() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch agents from API
   useEffect(() => {
     fetchAgents();
   }, []);
 
-  // Fetch agents from API
   const fetchAgents = async () => {
     try {
       setLoading(true);
@@ -25,14 +25,14 @@ export default function Sales() {
       }
 
       const data = await response.json();
-      console.log("API Response (Agents):", data);
 
-      if (Array.isArray(data)) {
-        setAgents(data);
+      // Safely extract agents array
+      if (data.data && Array.isArray(data.data)) {
+        setAgents(data.data);
       } else if (Array.isArray(data.agents)) {
         setAgents(data.agents);
-      } else if (data.data && Array.isArray(data.data)) {
-        setAgents(data.data);
+      } else if (Array.isArray(data)) {
+        setAgents(data);
       } else {
         setAgents([]);
       }
@@ -46,7 +46,10 @@ export default function Sales() {
     }
   };
 
-  // Loading State
+  // Use the fetched agents directly for rendering
+  const filteredAgents = agents;
+
+  // Loading state
   if (loading) {
     return (
       <div className="app-container">
@@ -59,7 +62,7 @@ export default function Sales() {
     );
   }
 
-  // Error State
+  // Error state
   if (error) {
     return (
       <div className="app-container">
@@ -76,23 +79,19 @@ export default function Sales() {
     );
   }
 
-  // Success State
+  // Success state
   return (
     <div className="app-container">
       <Header />
       <div className="main-layout container py-4">
-        {/* Filters */}
         <div className="d-flex flex-wrap gap-3 align-items-center mb-4">
-
-          {/* Add Agent Button */}
           <button className="btn-add" onClick={() => navigate("/addAgents")}>
             Add New Agent
           </button>
         </div>
 
-        {/* Agent List */}
         <div className="leads-list">
-          {!filteredAgents.length ? (
+          {filteredAgents.length === 0 ? (
             <div className="text-center text-muted py-5">
               <p>No agents found.</p>
             </div>
@@ -108,8 +107,7 @@ export default function Sales() {
                   <div>
                     <h5 className="mb-1">{agent.name || `Agent ${index + 1}`}</h5>
                     <small className="text-muted">
-                      {agent.role || "No Role"} |{" "}
-                      {agent.status || "Active"}
+                      {agent.role || "No Role"} | Active
                     </small>
                   </div>
                   <div>
