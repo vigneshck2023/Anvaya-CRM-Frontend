@@ -8,9 +8,6 @@ export default function Sales() {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [roleFilter, setRoleFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("");
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,29 +45,6 @@ export default function Sales() {
       setLoading(false);
     }
   };
-
-  // Filter + Sort Logic
-  const getFilteredAgents = () => {
-    let filtered = agents;
-
-    if (roleFilter !== "all") {
-      filtered = filtered.filter(
-        (agent) => agent.role && agent.role === roleFilter
-      );
-    }
-
-    if (sortBy === "name") {
-      filtered = filtered.sort((a, b) =>
-        (a.name || "").localeCompare(b.name || "")
-      );
-    } else if (sortBy === "leadsCount") {
-      filtered = filtered.sort((a, b) => (b.leadsCount || 0) - (a.leadsCount || 0));
-    }
-
-    return filtered;
-  };
-
-  const filteredAgents = getFilteredAgents();
 
   // Loading State
   if (loading) {
@@ -147,11 +121,6 @@ export default function Sales() {
 
                 {agent.email && <p className="mb-0 mt-2">{agent.email}</p>}
                 {agent.phone && <p className="mb-0">{agent.phone}</p>}
-                {agent.leadsCount !== undefined && (
-                  <p className="mb-0 text-secondary">
-                    Leads Assigned: {agent.leadsCount}
-                  </p>
-                )}
               </div>
             ))
           )}
