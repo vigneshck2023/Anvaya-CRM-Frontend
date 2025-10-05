@@ -82,7 +82,10 @@ export default function LeadDetails() {
                 </p>
                 <p><strong>Source:</strong> {lead.source}</p>
                 <p><strong>Status:</strong> {lead.status}</p>
-                <p><strong>Priority:</strong> {lead.priority}</p>
+                <p>
+                  <strong>{lead.priority.length === 1 ? "Priority: " : "Priorities: " }</strong>
+                {lead.priority && lead.priority.length > 0 ? lead.priority.join(", ") : "No Priority Set"}
+                </p>
                 <p><strong>Time to Close:</strong> {lead.timeToClose} days</p>
                 <button className="btn btn-secondary mt-2" onClick={() => navigate("/leads")}>
                   Back to Leads
