@@ -9,6 +9,7 @@ import SalesAgentDetails from "./pages/SalesAgentDetails";
 import Agent from "./pages/Agent";
 import Sales from "./pages/Sales";
 import Report from "./pages/Report";
+import Settings from "./pages/Settings";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -26,6 +27,7 @@ root.render(
      <Route path="/salesAgent" element={<Sales/>} />
      <Route path="/reports" element={<Report/>} />
      <Route path="/agents/:id" element={<SalesAgentDetails />} />
+     <Route path="/settings" element={<Settings/>} />
     </Routes>
   </BrowserRouter>
 );
