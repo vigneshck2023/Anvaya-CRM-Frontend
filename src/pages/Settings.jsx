@@ -66,7 +66,7 @@ export default function Settings() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to delete lead");
 
-      toast.success("Lead deleted!", { position: "bottom-right" });
+      toast.success("Lead deleted!", { position: "bottom-right", theme: "colored" });
       // Refresh lead list
       fetchLeads();
     } catch (err) {
