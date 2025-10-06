@@ -1,21 +1,23 @@
 import Header from "../components/Header";
-import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Agent({addAgent}){
-    const navigate = useNavigate();
-    const [formData,setFormData] = useState({
-        name: "",
-        email:"",
-        phone: "",
-        role: ""
-});
-const handleChange = (e) => {
+export default function Agent({ addAgent }) {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
+  });
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData({
       ...formData,
-      [name]: name === "timeToClose" ? parseInt(value, 10) : value,
+      [name]: value,
     });
   };
 
@@ -32,35 +34,45 @@ const handleChange = (e) => {
       console.log("Response:", data);
 
       if (!response.ok) {
-        alert("Error adding lead: " + (data.message || "Unknown error"));
+        toast.error(data.message || "Error adding agent", {
+          position: "bottom-right",
+          theme: "colored",
+          autoClose: 1700,
+        });
         return;
       }
 
+      toast.success("Agent added successfully!", {
+        position: "bottom-right",
+        theme: "colored",
+        autoClose: 1700,
+      });
+
       if (addAgent) addAgent();
-      navigate("/salesAgent");
+
+      setTimeout(() => navigate("/salesAgent"), 1700);
     } catch (error) {
-      console.error("Error adding lead:", error);
-      alert("Error adding lead (network issue)");
+      console.error("Error adding agent:", error);
+      toast.error("Network error. Please try again later.", {
+        position: "bottom-right",
+        theme: "colored",
+        autoClose: 1700,
+      });
     }
   };
 
-    return (
+  return (
     <div className="app-container">
       <Header />
+      <ToastContainer />
 
-      {/* Form section only */}
       <div className="d-flex justify-content-center mt-5">
-        <div
-          className="card shadow p-4"
-          style={{ maxWidth: "600px", width: "100%" }}
-        >
+        <div className="card shadow p-4" style={{ maxWidth: "600px", width: "100%" }}>
           <h2 className="mb-4 text-center" style={{ color: "#223348" }}>
-            {" "}
             Add New Sales Agent
           </h2>
 
           <form onSubmit={handleSubmit}>
-            {/* Agent Name */}
             <div className="mb-3">
               <label className="form-label">Agent Name</label>
               <input
@@ -73,11 +85,10 @@ const handleChange = (e) => {
               />
             </div>
 
-            {/* Agent Email */}
             <div className="mb-3">
               <label className="form-label">Agent Email</label>
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 name="email"
                 value={formData.email}
@@ -85,7 +96,6 @@ const handleChange = (e) => {
                 required
               />
             </div>
-
 
             <div className="mb-3">
               <label className="form-label">Agent Contact</label>
@@ -110,8 +120,7 @@ const handleChange = (e) => {
                 required
               />
             </div>
-            
-            {/* Submit button */}
+
             <div className="d-grid">
               <button type="submit" className="btn-add">
                 Add New Agent
@@ -122,5 +131,4 @@ const handleChange = (e) => {
       </div>
     </div>
   );
-
 }

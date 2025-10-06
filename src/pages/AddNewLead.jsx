@@ -1,15 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function AddNewLead({ onLeadAdded }) {
   const navigate = useNavigate();
 
-  // States
   const [agents, setAgents] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [priorityDropdownOpen, setPriorityDropdownOpen] = useState(false);
-
   const dropdownRef = useRef();
   const priorityDropdownRef = useRef();
 
@@ -26,9 +25,7 @@ export default function AddNewLead({ onLeadAdded }) {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const res = await fetch(
-          "https://anvaya-crm-ebon.vercel.app/api/agent"
-        );
+        const res = await fetch("https://anvaya-crm-ebon.vercel.app/api/agent");
         const data = await res.json();
         setAgents(data.data || []);
       } catch (err) {
@@ -89,35 +86,42 @@ export default function AddNewLead({ onLeadAdded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        "https://anvaya-crm-ebon.vercel.app/leads",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await fetch("https://anvaya-crm-ebon.vercel.app/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
       const data = await res.json();
+
       if (!res.ok) {
-        alert("Error adding lead: " + (data.message || "Unknown error"));
+        toast.error(data.message || "Error adding lead", {
+          position: "bottom-right",
+        });
         return;
       }
+
+      toast.success("Lead added successfully!", {
+        position: "bottom-right",
+        theme: "colored",
+        autoClose: 1700,
+        onClose: () => navigate("/leads"),
+      });
+
       if (onLeadAdded) onLeadAdded();
-      navigate("/");
     } catch (err) {
       console.error("Error adding lead:", err);
-      alert("Network error while adding lead");
+      toast.error("Network error while adding lead", {
+        position: "bottom-right",
+      });
     }
   };
 
   return (
     <div className="app-container">
       <Header />
+      <ToastContainer />
       <div className="d-flex justify-content-center mt-5">
-        <div
-          className="card shadow p-4"
-          style={{ maxWidth: "600px", width: "100%" }}
-        >
+        <div className="card shadow p-4" style={{ maxWidth: "600px", width: "100%" }}>
           <h2 className="mb-4 text-center">Add New Lead</h2>
 
           <form onSubmit={handleSubmit}>
@@ -156,7 +160,7 @@ export default function AddNewLead({ onLeadAdded }) {
               <label className="form-label">Sales Agents</label>
               <div
                 className="border rounded d-flex align-items-center justify-content-between p-2"
-                style={{ cursor: "pointer", minHeight: "38px", backgroundColor: "#fff" }}
+                style={{ cursor: "pointer", backgroundColor: "#fff" }}
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 {formData.salesAgent.length > 0
@@ -231,7 +235,7 @@ export default function AddNewLead({ onLeadAdded }) {
               <label className="form-label">Priority</label>
               <div
                 className="border rounded d-flex align-items-center justify-content-between p-2"
-                style={{ cursor: "pointer", minHeight: "38px", backgroundColor: "#fff" }}
+                style={{ cursor: "pointer", backgroundColor: "#fff" }}
                 onClick={() => setPriorityDropdownOpen(!priorityDropdownOpen)}
               >
                 {formData.priority.length > 0
