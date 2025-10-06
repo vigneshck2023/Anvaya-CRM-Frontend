@@ -69,7 +69,7 @@ export default function Report() {
     ],
   };
 
-  // 3️⃣ Lead Status Distribution
+  // Lead Status Distribution
   const statusCounts = {};
   leadData.forEach((lead) => {
     statusCounts[lead.status] = (statusCounts[lead.status] || 0) + 1;
