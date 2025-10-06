@@ -58,8 +58,6 @@ export default function Settings() {
 
   // Delete lead
   const handleDeleteLead = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this lead?")) return;
-
     try {
       const res = await fetch(`https://anvaya-crm-ebon.vercel.app/leads/${id}`, {
         method: "DELETE",
